@@ -75,12 +75,19 @@ class Test(unittest.TestCase):
         result = s.largestSumSubArrayIndices(nums)
         self.assertListEqual(result, expected)
 
-    def test2(self):
+    def test4(self):
         s = Solution()
         nums = [10, -1, 2, -7, 3, 3]
         expected = [0, 2]
         result = s.largestSumSubArrayIndices(nums)
         self.assertListEqual(result, expected)
+
+    def test5(self):
+        s = Solution()
+        nums = [-2, -3]
+        expected = -2
+        result = s.largestSumSubArray(nums)
+        self.assertIs(result, expected)
 
 
 if __name__ == "__main__":
