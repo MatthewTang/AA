@@ -34,7 +34,7 @@ class Solution:
     # kadane, time: O(n)
     def maxTurbulenceSize(self, arr: List[int]) -> int:
         maxTs = currTs = 1
-        nxt = 0
+        nxt = 0 # 0: greater/smaller , 1: greater, -1 smaller
         for i in range(1, len(arr)):
             if arr[i] == arr[i - 1]:
                 currTs = 1
