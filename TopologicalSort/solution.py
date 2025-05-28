@@ -18,14 +18,14 @@ class Solution:
             topSort.append(i)
             path.remove(i)
 
-        adj = {i: [] for i in range(1, n + 1)}
+        adj = {i: [] for i in range(n)}
         for src, dst in edges:
             adj[src].append(dst)
         topSort = []
         visited = set()
         path = set()
         try:
-            for i in range(1, n + 1):
+            for i in range(n):
                 dfs(i, adj, visited, topSort, path)
         except ValueError:
             return []
@@ -38,14 +38,14 @@ class Solution:
         adj = [set() for _ in range(n)]
         indegree = [0] * n
         for src, dst in edges:
-            adj[src - 1].add(dst - 1)
-            indegree[dst - 1] += 1
+            adj[src].add(dst)
+            indegree[dst] += 1
 
         res = []
         q = deque([i for i in range(n) if indegree[i] == 0])
         while q:
             src = q.popleft()
-            res.append(src + 1)
+            res.append(src)
             for dst in adj[src]:
                 indegree[dst] -= 1
                 if indegree[dst] == 0:
@@ -57,19 +57,19 @@ class Solution:
 class Test(unittest.TestCase):
     def test1(self):
         s = Solution()
-        edges = [[1, 2], [1, 3], [2, 4], [3, 5], [4, 6], [5, 6], [7, 8]]
+        edges = [[0, 1], [0, 2], [1, 3], [2, 4], [3, 5], [4, 5], [6, 7]]
         n = 9
         expected = [
-            [1, 2, 3, 4, 5, 6, 7, 8, 9],
-            [9, 7, 8, 1, 3, 5, 2, 4, 6],
-            [1, 7, 9, 2, 3, 8, 4, 5, 6],
+            [0, 1, 2, 3, 4, 5, 6, 7, 8],
+            [8, 6, 7, 0, 2, 4, 1, 3, 5],
+            [0, 6, 8, 1, 2, 7, 3, 4, 5],
         ]
         result = s.topologicalSort(edges, n)
         self.assertTrue(result in expected)
 
     def test2(self):
         s = Solution()
-        edges = [[1, 2], [1, 3], [2, 4], [3, 5], [4, 6], [5, 6], [7, 8], [4, 1]]
+        edges = [[0, 1], [0, 2], [1, 3], [2, 4], [3, 5], [4, 5], [6, 7], [3, 0]]
         n = 9
         expected = []
         result = s.topologicalSort(edges, n)
