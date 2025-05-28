@@ -53,6 +53,36 @@ class Solution:
 
         return [] if any(indegree) else res
 
+    def topologicalSort(self, edges: List[List[int]], n: int) -> List[int]:
+        seen = set()
+        path = set()
+        out_edges = [set() for _ in range(n)]
+        top_sort = []
+
+        # reverse src, dst
+        for src, dst in edges:
+            out_edges[dst].add(src)
+
+        def dfs(n):
+            if n in path:
+                raise ValueError
+            if n in seen:
+                return
+            seen.add(n)
+            path.add(n)
+            for nei in out_edges[n]:
+                dfs(nei)
+            top_sort.append(n)
+            path.remove(n)
+
+        try:
+            for i in range(n):
+                dfs(i)
+        except:
+            return []
+
+        return top_sort
+
 
 class Test(unittest.TestCase):
     def test1(self):
