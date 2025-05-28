@@ -52,7 +52,7 @@ class Solution:
             res.append(u in allPr[v])
         return res
 
-    # topological
+    # topological (bfs)
     def checkIfPrerequisite(
         self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]
     ) -> List[bool]:
@@ -73,6 +73,28 @@ class Solution:
                 if indegree[c] == 0:
                     q.append(c)
 
+        return [u in allPr[v] for u, v in queries]
+
+    def checkIfPrerequisite(
+        self, numCourses: int, prerequisites: List[List[int]], queries: List[List[int]]
+    ) -> List[bool]:
+        adj = [set() for _ in range(numCourses)]
+        allPr = [set() for _ in range(numCourses)]
+        visited = set()
+        for pr, c in prerequisites:
+            adj[c].add(pr)
+
+        def dfs(c):
+            if c in visited:
+                return
+            visited.add(c)
+            for pr in adj[c]:
+                dfs(pr)
+                allPr[c].add(pr)
+                allPr[c].update(allPr[pr])
+
+        for i in range(numCourses):
+            dfs(i)
         return [u in allPr[v] for u, v in queries]
 
 
