@@ -35,29 +35,30 @@ class Solution:
 
     # bfs
     def topologicalSort(self, edges: List[List[int]], n: int) -> List[int]:
-        adj = [set() for _ in range(n)]
-        indegree = [0] * n
+        out_edges = [set() for _ in range(n)]
+        in_degrees = [0] * n
         for src, dst in edges:
-            adj[src].add(dst)
-            indegree[dst] += 1
+            out_edges[src].add(dst)
+            in_degrees[dst] += 1
 
-        res = []
-        q = deque([i for i in range(n) if indegree[i] == 0])
+        ordering = []
+        q = deque([i for i in range(n) if in_degrees[i] == 0])
         while q:
             src = q.popleft()
-            res.append(src)
-            for dst in adj[src]:
-                indegree[dst] -= 1
-                if indegree[dst] == 0:
+            ordering.append(src)
+            for dst in out_edges[src]:
+                in_degrees[dst] -= 1
+                if in_degrees[dst] == 0:
                     q.append(dst)
 
-        return [] if any(indegree) else res
+        return ordering if len(ordering) == n else []
 
+    # dfs, reverse edges' directions
     def topologicalSort(self, edges: List[List[int]], n: int) -> List[int]:
         seen = set()
         path = set()
         out_edges = [set() for _ in range(n)]
-        top_sort = []
+        ordering = []
 
         # reverse src, dst
         for src, dst in edges:
@@ -72,7 +73,7 @@ class Solution:
             path.add(n)
             for nei in out_edges[n]:
                 dfs(nei)
-            top_sort.append(n)
+            ordering.append(n)
             path.remove(n)
 
         try:
@@ -81,7 +82,7 @@ class Solution:
         except:
             return []
 
-        return top_sort
+        return ordering
 
 
 class Test(unittest.TestCase):
