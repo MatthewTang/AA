@@ -22,10 +22,10 @@ class Solution:
     def sortItems(
         self, n: int, m: int, group: List[int], beforeItems: List[List[int]]
     ) -> List[int]:
-        for i in range(n):
-            g = group[i]
-            if g == -1:
-                group[i] = m
+        for grp in range(n):
+            items = group[grp]
+            if items == -1:
+                group[grp] = m
                 m += 1
 
         item_out_edges = [list() for _ in range(n)]
@@ -34,48 +34,49 @@ class Solution:
         grp_out_edges = [list() for _ in range(m)]
         grp_in_degrees = [0] * m
 
-        for i in range(n):
-            for b in beforeItems[i]:
-                if group[i] == group[b]:
-                    item_out_edges[b].append(i)
-                    item_in_degrees[i] += 1
+        for grp in range(n):
+            for b in beforeItems[grp]:
+                if group[grp] == group[b]:
+                    item_out_edges[b].append(grp)
+                    item_in_degrees[grp] += 1
                 else:
-                    grp_out_edges[group[b]].append(group[i])
-                    grp_in_degrees[group[i]] += 1
+                    grp_out_edges[group[b]].append(group[grp])
+                    grp_in_degrees[group[grp]] += 1
 
-        grp_items = [list() for _ in range(m)]
-        for i in range(n):
-            grp_items[group[i]].append(i)
+        items_in_grps = [list() for _ in range(m)]
+        for grp in range(n):
+            items_in_grps[group[grp]].append(grp)
 
-        res = []
-        for g in grp_items:
-            if len(g) == 0:
-                res.append([])
+        ordered_items_in_grps = []
+        for items in items_in_grps:
+            if not items:
+                ordered_items_in_grps.append([])
                 continue
-            order = self.topSort(
-                deque([i for i in g if item_in_degrees[i] == 0]),
+            ordered_items = self.topSort(
+                deque([i for i in items if item_in_degrees[i] == 0]),
                 item_out_edges,
                 item_in_degrees,
-                len(g),
+                len(items),
             )
-            if order == []:
+            if not ordered_items:
                 return []
-            res.append(order)
+            ordered_items_in_grps.append(ordered_items)
 
         grps = [i for i in range(m)]
-        gres = self.topSort(
+        ordered_grps = self.topSort(
             deque([i for i in grps if grp_in_degrees[i] == 0]),
             grp_out_edges,
             grp_in_degrees,
             len(grps),
         )
-        if gres == []:
+        if not ordered_grps:
             return []
-        r = []
-        for i in gres:
-            r.append(res[i])
 
-        return [i for _r in r for i in _r]
+        return [
+            items
+            for grp in [ordered_items_in_grps[grp] for grp in ordered_grps]
+            for items in grp
+        ]
 
 
 class Test(unittest.TestCase):
