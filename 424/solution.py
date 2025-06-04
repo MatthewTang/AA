@@ -16,7 +16,6 @@ class Solution:
                 map_[s[l]] -= 1
                 l += 1
             res = max(res, r - l + 1)
-            print(s[l : r + 1])
         return res
 
     # def characterReplacement(self, s: str, k: int) -> int:
@@ -29,7 +28,6 @@ class Solution:
     #             map_[s[l]] -= 1
     #             l += 1
     #         res = max(res, r - l + 1)
-    #         print(s[l : r + 1])
     #     return res
 
 
