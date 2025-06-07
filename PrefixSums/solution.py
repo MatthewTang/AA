@@ -2,8 +2,9 @@ import unittest
 from typing import List, Optional
 
 
-# nums:        [1,2,3,5]
+# nums:        [1,2,3, 5]
 # prefix_sums: [1,3,6,11]
+# prefix_sums: [0,1,3, 6,11]
 class PrefixSum:
     def __init__(self, nums: List[int]) -> None:
         self.nums = nums
