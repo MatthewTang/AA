@@ -1,6 +1,7 @@
 import unittest
 from typing import List, Optional
 from collections import deque
+from Result.solution import Err, Ok
 
 
 class Solution:
@@ -81,6 +82,37 @@ class Solution:
                 dfs(i)
         except:
             return []
+
+        return ordering
+
+    # Result instead of try/except
+    def topologicalSort(self, edges: List[List[int]], n: int) -> List[int]:
+        seen = set()
+        path = set()
+        out_edges = [set() for _ in range(n)]
+        ordering = []
+
+        # reverse src, dst
+        for src, dst in edges:
+            out_edges[dst].add(src)
+
+        def dfs(n):
+            if n in path:
+                return Err()
+            if n in seen:
+                return Ok()
+            seen.add(n)
+            path.add(n)
+            for nei in out_edges[n]:
+                if not dfs(nei).is_ok():
+                    return Err()
+            ordering.append(n)
+            path.remove(n)
+            return Ok()
+
+        for i in range(n):
+            if not dfs(i).is_ok():
+                return []
 
         return ordering
 
