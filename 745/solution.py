@@ -2,6 +2,63 @@ import unittest
 from typing import List, Optional
 
 
+# dfs, doesn't work when pref, suff overlap
+# class TrieNode:
+#     def __init__(self):
+#         self.children = {}
+#         self.index = -1
+#
+#     def __repr__(self) -> str:
+#         return f"TrieNode({self.children}, {self.index})"
+#
+#
+# class Trie:
+#     def __init__(self) -> None:
+#         self.root = TrieNode()
+#
+#     def insert(self, word: str, index: int):
+#         curr = self.root
+#         for c in word:
+#             if c in curr.children:
+#                 curr = curr.children[c]
+#             else:
+#                 curr.children[c] = TrieNode()
+#                 curr = curr.children[c]
+#         curr.index = index
+#
+#
+# class WordFilter:
+#     def __init__(self, words: List[str]):
+#         self.trie = Trie()
+#         for i, w in enumerate(words):
+#             self.trie.insert(w, i)
+#
+#     def f(self, prefix: str, suffix: str):
+#         curr = self.trie.root
+#         for c in prefix:
+#             if c in curr.children:
+#                 curr = curr.children[c]
+#             else:
+#                 return -1
+#         res = []
+#         if curr.index >= 0 and prefix == suffix:
+#             res.append(curr.index)
+#
+#         def dfs(curr, suffix):
+#             if not suffix:
+#                 if curr.index >= 0:
+#                     res.append(curr.index)
+#                 return
+#             for c in curr.children:
+#                 if c == suffix[0]:
+#                     dfs(curr.children[c], suffix[1:])
+#                 else:
+#                     dfs(curr.children[c], suffix)
+#
+#         dfs(curr, suffix)
+#         return max(res) if res else -1
+
+
 # # bf: time: O(N*n*m), N no. of f calls, n no. of words, m avg len of word, space: O(1)
 # class WordFilter:
 #     def __init__(self, words: List[str]) -> None:
@@ -118,6 +175,18 @@ class Test(unittest.TestCase):
         w = WordFilter(["apple", "are", "apple"])
         expected = 2
         result = w.f("a", "e")
+        self.assertIs(result, expected)
+
+    def test7(self):
+        w = WordFilter(["apple", "applet"])
+        expected = 0
+        result = w.f("ap", "e")
+        self.assertIs(result, expected)
+
+    def test8(self):
+        w = WordFilter(["abc"])
+        expected = 0
+        result = w.f("ab", "bc")
         self.assertIs(result, expected)
 
 
