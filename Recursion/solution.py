@@ -47,6 +47,29 @@ class Solution:
 
         return res
 
+    def find_all_sub_sequences_3(self, nums, k):
+        res = []
+
+        def dfs(i, ss):
+            ss.append(nums[i])
+            res.append(ss[:])
+            for j in range(i + 1, len(nums)):
+                if 0 < nums[j] - nums[i] <= k:
+                    dfs(j, ss)
+            ss.pop()
+
+            # # w/o append/pop
+            # _ss = ss + [nums[i]]
+            # res.append(_ss)
+            # for j in range(i + 1, len(nums)):
+            #     if nums[j] > nums[i]:
+            #         dfs(j, _ss)
+
+        for i in range(len(nums)):
+            dfs(i, [])
+
+        return res
+
     def permute(self, nums):
         res = []
 
@@ -83,7 +106,16 @@ class Test(unittest.TestCase):
         s = Solution()
         nums = [2, 3, 4]
         res = s.permute(nums)
-        print(res)
+        expected = [[2, 3, 4], [2, 4, 3], [3, 2, 4], [3, 4, 2], [4, 2, 3], [4, 3, 2]]
+        self.assertListEqual(res, expected)
+
+    def test3(self):
+        s = Solution()
+        nums = [4, 2, 1, 4, 3, 4, 5, 8, 15]
+        k = 3
+        result = s.find_all_sub_sequences_3(nums, k)
+        result.sort(key=lambda x: len(x))
+        self.assertIs(len(result[-1]), 5)
 
 
 if __name__ == "__main__":
