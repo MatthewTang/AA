@@ -110,11 +110,11 @@ class Node:
 
 
 # bst, time: O(log n) (avg), O(n) worst case
+# iterative
 class MyCalendar:
     def __init__(self):
         self.root = None
 
-    # iterative
     def book(self, start: int, end: int) -> bool:
         if self.root is None:
             self.root = Node(start, end)
@@ -133,6 +133,34 @@ class MyCalendar:
         else:
             prev.left = Node(start, end)
         return True
+
+
+# bst, time: O(log n) (avg), O(n) worst case
+# recursive
+class MyCalendar:
+    def __init__(self):
+        self.root = None
+
+    def _insert(self, curr: Node, start: int, end: int) -> bool:
+        if start >= curr.end:
+            if curr.right is None:
+                curr.right = Node(start, end)
+                return True
+            return self._insert(curr.right, start, end)
+        elif end <= curr.start:
+            if curr.left is None:
+                curr.left = Node(start, end)
+                return True
+            return self._insert(curr.left, start, end)
+        else:
+            return False
+
+    def book(self, start: int, end: int) -> bool:
+        if self.root is None:
+            self.root = Node(start, end)
+            return True
+
+        return self._insert(self.root, start, end)
 
 
 class Test(unittest.TestCase):
