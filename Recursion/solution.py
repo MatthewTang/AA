@@ -70,6 +70,7 @@ class Solution:
 
         return res
 
+    # time: O(n!)
     def permute(self, nums):
         res = []
 
