@@ -89,6 +89,7 @@ class Solution:
             cur_set.pop()
             dfs(i + 1, cur_set)
 
+        nums.sort()
         dfs(0)
         return [list(t) for t in res]
 
