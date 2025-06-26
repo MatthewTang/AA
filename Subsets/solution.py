@@ -97,7 +97,7 @@ class Solution:
     def subsets_with_duplicates(self, nums: List[int]) -> List[List[int]]:
         res = []
 
-        def dfs(i: int, path: List[int] = []):
+        def dfs(i: int = 0, path: List[int] = []):
             if i == len(nums):
                 res.append(path[:])
                 return
@@ -111,7 +111,7 @@ class Solution:
             dfs(i + 1, path)
 
         nums.sort()
-        dfs(0)
+        dfs()
         return res
 
 
