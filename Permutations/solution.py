@@ -3,6 +3,7 @@ from typing import List, Optional
 
 
 class Solution:
+    # time: O(n * n!), space: O(n)
     def permutations(self, nums: List[int]) -> List[List[int]]:
         res = []
 
@@ -20,6 +21,7 @@ class Solution:
         dfs(nums)
         return res
 
+    # time: O((n^2) * n!), space: auxiliary: O(n), output: O(n * n!)
     def permutations(self, nums: List[int]) -> List[List[int]]:
         def dfs(i: int = 0) -> List[List[int]]:
             if i == len(nums):
@@ -36,6 +38,7 @@ class Solution:
 
         return dfs()
 
+    # time: O((n^2) * n!), space: auxiliary: O(n), output: O(n * n!)
     def permutations(self, nums: List[int]) -> List[List[int]]:
         paths = [[]]
         for i in range(len(nums)):
