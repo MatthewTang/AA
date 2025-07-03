@@ -5,7 +5,7 @@ import heapq
 
 
 class Solution:
-    # O(n^2)
+    # O((n^2)log(2))
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
         adj = defaultdict(list)  #
         # n^2
