@@ -41,7 +41,7 @@ class UnionFind:
 
 
 class Solution:
-    # time: O(E^2(logV)), space: O(E+V)
+    # kruskal's, time: O(E^2(logV)), space: O(E+V)
     def find_critical_and_pseudo_critical_edges(
         self, n: int, edges: List[List[int]]
     ) -> List[List[int]]:
@@ -78,19 +78,61 @@ class Solution:
                 count += 1
             return total if count == n - 1 else -1
 
-        total = mst(n, edges)
+        mst_weight = mst(n, edges)
         res = [[], []]
 
         for i in range(len(edges)):
-            _total = mst(n, edges[:i] + edges[i + 1 :])
-            if _total == -1 or _total > total:
+            _weight = mst(n, edges[:i] + edges[i + 1 :])
+            if _weight == -1 or _weight > mst_weight:
                 res[0].append(i)
                 continue
-            _total = mst_include(n, edges, i)
-            if _total == total:
+            _weight = mst_include(n, edges, i)
+            if _weight == mst_weight:
                 res[1].append(i)
 
         return res
+
+    # kruskal's (optimal)
+    def find_critical_and_pseudo_critical_edges(
+        self, n: int, edges: List[List[int]]
+    ) -> List[List[int]]:
+
+        for i, edge in enumerate(edges):
+            edge.append(i)
+
+        edges.sort(key=lambda e: e[2])
+
+        uf = UnionFind(n)
+        mst_weight = 0
+        for u, v, w, i in edges:
+            if uf.union(u, v):
+                mst_weight += w
+
+        critical, pseudo = [], []
+
+        for n1, n2, e_w, i in edges:
+
+            # exclude edge
+            uf = UnionFind(n)
+            weight = 0
+            for u, v, w, j in edges:
+                if i != j and uf.union(u, v):
+                    weight += w
+            if uf.components != 1 or weight > mst_weight:
+                critical.append(i)
+                continue
+
+            # include edge
+            uf = UnionFind(n)
+            uf.union(n1, n2)
+            weight = e_w
+            for u, v, w, j in edges:
+                if uf.union(u, v):
+                    weight += w
+            if weight == mst_weight:
+                pseudo.append(i)
+
+        return [critical, pseudo]
 
 
 class Test(unittest.TestCase):
@@ -100,7 +142,7 @@ class Test(unittest.TestCase):
         edges = [[0, 3, 2], [0, 2, 5], [1, 2, 4]]
         result = s.find_critical_and_pseudo_critical_edges(n, edges)
         expected = [[0, 1, 2], []]
-        self.assertListEqual(result, expected)
+        self.assertListEqual([sorted(l) for l in result], [sorted(l) for l in expected])
 
     def test2(self):
         s = Solution()
