@@ -5,7 +5,7 @@ import heapq
 
 
 class Solution:
-    # O((n^2)log(2))
+    # heap prim's, time: O((n^2)log(n)), space: O(n^2)
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
         adj = defaultdict(list)  #
         # n^2
@@ -35,13 +35,34 @@ class Solution:
 
         return total_cost
 
+    # dense-scan prim's
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        n = len(points)
+        in_mst = [False] * n
+        min_edge = [float("inf")] * n
+        min_edge[0] = 0
+
+        total = 0
+        for _ in range(n):
+            u = min((c, i) for i, c in enumerate(min_edge) if not in_mst[i])[1]
+            in_mst[u] = True
+            total += min_edge[u]
+            for v in range(n):
+                if not in_mst[v]:
+                    p1, p2 = points[u], points[v]
+                    cost = abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+                    if cost < min_edge[v]:
+                        min_edge[v] = cost
+
+        return total
+
 
 class Test(unittest.TestCase):
     def test1(self):
         s = Solution()
         points = [[0, 0], [2, 2], [3, 10], [5, 2], [7, 0]]
-        expected = 20
         result = s.minCostConnectPoints(points)
+        expected = 20
         self.assertIs(result, expected)
 
     def test2(self):
