@@ -39,6 +39,70 @@ class Solution:
 
         return dfs(0, m, n)
 
+    def largest_subset(self, strs: str, m: int, n: int) -> int:
+        def _count(s: str) -> List[int]:
+            m, n = 0, 0
+            for i in range(len(s)):
+                if s[i] == "0":
+                    m += 1
+                else:
+                    n += 1
+            return m, n
+
+        l = len(strs)
+        r, c = m + 1, n + 1
+        dp = [[[0] * c for _ in range(r)] for _ in range(l)]
+
+        # init
+        c_m, c_n = _count(strs[0])
+        for _r in range(r):
+            for _c in range(c):
+                dp[0][_r][_c] = 1 if _r >= c_m and _c >= c_n else 0
+
+        for i in range(1, l):
+            c_m, c_n = _count(strs[i])
+            for _r in range(r):
+                for _c in range(c):
+                    _max = dp[i - 1][_r][_c]
+                    if _r >= c_m and _c >= c_n:
+                        _max = max(_max, dp[i - 1][_r - c_m][_c - c_n] + 1)
+                    dp[i][_r][_c] = _max
+
+        return dp[-1][-1][-1]
+
+    def largest_subset(self, strs: str, m: int, n: int) -> int:
+        def _count(s: str) -> List[int]:
+            m, n = 0, 0
+            for i in range(len(s)):
+                if s[i] == "0":
+                    m += 1
+                else:
+                    n += 1
+            return m, n
+
+        l = len(strs)
+        r, c = m + 1, n + 1
+        dp = [[0] * c for _ in range(r)]
+
+        # init
+        c_m, c_n = _count(strs[0])
+        for _r in range(r):
+            for _c in range(c):
+                dp[_r][_c] = 1 if _r >= c_m and _c >= c_n else 0
+
+        for i in range(1, l):
+            c_m, c_n = _count(strs[i])
+            _dp = [[0] * c for _ in range(r)]
+            for _r in range(r):
+                for _c in range(c):
+                    _max = dp[_r][_c]
+                    if _r >= c_m and _c >= c_n:
+                        _max = max(_max, dp[_r - c_m][_c - c_n] + 1)
+                    _dp[_r][_c] = _max
+            dp = _dp
+
+        return dp[-1][-1]
+
 
 class Test(unittest.TestCase):
     def test1(self):
