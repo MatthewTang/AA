@@ -1,8 +1,10 @@
 import unittest
 from typing import List, Optional
+from collections import deque
 
 
 class Solution:
+    # bf, time: O(3^n), space: O(n), given n = len(days)
     def min_cost_tickets(self, days: List[int], costs: List[int]) -> int:
         def dfs(i):
             if i == len(days):
@@ -20,7 +22,7 @@ class Solution:
 
         return dfs(0)
 
-    # cache
+    # cache, time: O(n), space: O(n)
     def min_cost_tickets(self, days: List[int], costs: List[int]) -> int:
         n = len(days)
         cache = [0] * n  # 1 <= costs[i]
@@ -44,7 +46,7 @@ class Solution:
 
         return dfs(0)
 
-    # dp(bu)
+    # dp(bu), time: O(3n) -> O(n), space: O(n)
     def min_cost_tickets(self, days: List[int], costs: List[int]) -> int:
         n = len(days)
         dp = [0] * (n + 1)
@@ -57,6 +59,26 @@ class Solution:
                 dp[i] = min(dp[i], c + dp[j])
 
         return dp[0]
+
+    # dp(bu), time: O(n), space: O(1)
+    def min_cost_tickets(self, days: List[int], costs: List[int]) -> int:
+        n = len(days)
+        dp7, dp30 = deque(), deque()
+        dp = last7 = last30 = 0
+
+        for i in range(n - 1, -1, -1):
+            dp += costs[0]
+            while dp7 and dp7[0][0] >= days[i] + 7:
+                last7 = dp7.popleft()[1]
+            dp = min(dp, last7 + costs[1])
+            while dp30 and dp30[0][0] >= days[i] + 30:
+                last30 = dp30.popleft()[1]
+            dp = min(dp, last30 + costs[2])
+
+            dp7.append([days[i], dp])
+            dp30.append([days[i], dp])
+
+        return dp
 
 
 class Test(unittest.TestCase):
