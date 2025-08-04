@@ -76,6 +76,22 @@ class Solution:
 
         return dp[0][0]
 
+    def count(self, s: str, t: str) -> int:
+        n, m = len(s) + 1, len(t) + 1
+        dp = [0] * m
+        dp[-1] = 1
+
+        for r in range(n - 2, -1, -1):
+            _dp = [0] * m
+            _dp[-1] = 1
+            for c in range(m - 2, -1, -1):
+                skip = dp[c]
+                include = 0 if s[r] != t[c] else dp[c + 1]
+                _dp[c] = skip + include
+            dp = _dp
+
+        return dp[0]
+
 
 class Test(unittest.TestCase):
     def test1(self):
