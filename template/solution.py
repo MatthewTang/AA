@@ -11,8 +11,8 @@ class Test(unittest.TestCase):
     def test1(self):
         s = Solution()
         arg = 1
-        expected = 1
         result = s.fname(arg)
+        expected = 1
         self.assertIs(result, expected)
 
 
