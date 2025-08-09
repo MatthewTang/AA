@@ -3,6 +3,8 @@ from typing import List, Optional
 
 
 class Solution:
+    # bf, time: O(2^(n+m), space: O(n+m)
+    # memoization: time, space: O(n*m)
     def is_interleave(self, s1: str, s2: str, s3: str) -> bool:
         n, m, p = len(s1), len(s2), len(s3)
         if p != n + m:
@@ -26,6 +28,7 @@ class Solution:
 
         return dfs(0, 0)
 
+    # dp(bu), time/space: O(n*m)
     def is_interleave(self, s1: str, s2: str, s3: str) -> bool:
         n, m, p = len(s1), len(s2), len(s3)
         if p != n + m:
@@ -55,6 +58,7 @@ class Solution:
 
         return dp[0][0]
 
+    # dp(bu), time: O(n*m), space: O(min(n,m))
     def is_interleave(self, s1: str, s2: str, s3: str) -> bool:
         n, m, p = len(s1), len(s2), len(s3)
         if p != n + m:
@@ -98,32 +102,32 @@ class Test(unittest.TestCase):
         expected = True
         self.assertIs(result, expected)
 
-    # def test2(self):
-    #     s = Solution()
-    #     s1 = "aabcc"
-    #     s2 = "dbbca"
-    #     s3 = "aadbbbaccc"
-    #     result = s.is_interleave(s1, s2, s3)
-    #     expected = False
-    #     self.assertIs(result, expected)
-    #
-    # def test3(self):
-    #     s = Solution()
-    #     s1 = ""
-    #     s2 = ""
-    #     s3 = ""
-    #     result = s.is_interleave(s1, s2, s3)
-    #     expected = True
-    #     self.assertIs(result, expected)
-    #
-    # def test4(self):
-    #     s = Solution()
-    #     s1 = "bbbcc"
-    #     s2 = "bbaccbbbabcacc"
-    #     s3 = "bbbbacbcccbcbabbacc"
-    #     result = s.is_interleave(s1, s2, s3)
-    #     expected = False
-    #     self.assertIs(result, expected)
+    def test2(self):
+        s = Solution()
+        s1 = "aabcc"
+        s2 = "dbbca"
+        s3 = "aadbbbaccc"
+        result = s.is_interleave(s1, s2, s3)
+        expected = False
+        self.assertIs(result, expected)
+
+    def test3(self):
+        s = Solution()
+        s1 = ""
+        s2 = ""
+        s3 = ""
+        result = s.is_interleave(s1, s2, s3)
+        expected = True
+        self.assertIs(result, expected)
+
+    def test4(self):
+        s = Solution()
+        s1 = "bbbcc"
+        s2 = "bbaccbbbabcacc"
+        s3 = "bbbbacbcccbcbabbacc"
+        result = s.is_interleave(s1, s2, s3)
+        expected = False
+        self.assertIs(result, expected)
 
 
 if __name__ == "__main__":
