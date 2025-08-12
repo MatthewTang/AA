@@ -152,21 +152,53 @@ class Solution:
     #         ans = max(ans, cur)
     #     return ans
 
+    # def lengthOfLIS(self, nums: List[int], k: int) -> int:
+    #     """Segment tree version (O(n log U))."""
+    #     if not nums:
+    #         return 0
+    #     vals, to_idx = compress(nums)
+    #     seg = SegMax(len(vals))
+    #     ans = 0
+    #     for v in nums:
+    #         L = bisect_left(vals, v - k)
+    #         R = bisect_left(vals, v) - 1
+    #         best = seg.query(L, R)
+    #         cur = best + 1
+    #         seg.update(to_idx[v], cur)
+    #         if cur > ans:
+    #             ans = cur
+    #     return ans
+
+    # def lengthOfLIS(self, nums: List[int], k: int) -> int:
+    #     vals = sorted(set(nums))
+    #     val_to_idx = {val: i for i, val in enumerate(vals)}
+    #     dp = [0] * len(vals)
+    #     ans = 0
+    #     for num in nums:
+    #         left = bisect_left(vals, num - k)
+    #         # right = bisect_left(vals, num) - 1
+    #         right = val_to_idx[num] - 1
+
+    #         best = max(dp[left : right + 1]) if left <= right else 0
+    #         curr = best + 1
+    #         idx = val_to_idx[num]
+    #         dp[idx] = max(dp[idx], curr)
+    #         ans = max(ans, dp[idx])
+    #     return ans
+
     def lengthOfLIS(self, nums: List[int], k: int) -> int:
-        """Segment tree version (O(n log U))."""
-        if not nums:
-            return 0
-        vals, to_idx = compress(nums)
+        vals = sorted(set(nums))
+        val_to_idx = {v: i for i, v in enumerate(vals)}
         seg = SegMax(len(vals))
         ans = 0
         for v in nums:
             L = bisect_left(vals, v - k)
             R = bisect_left(vals, v) - 1
-            best = seg.query(L, R)
-            cur = best + 1
-            seg.update(to_idx[v], cur)
-            if cur > ans:
-                ans = cur
+            best = seg.query(L, R) if L <= R else 0
+            curr = best + 1
+            idx = val_to_idx[v]
+            seg.update(idx, curr)
+            ans = max(ans, curr)
         return ans
 
 
